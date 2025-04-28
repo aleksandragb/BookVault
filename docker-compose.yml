@@ -1,0 +1,35 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+    volumes:
+      - ./frontend:/var/www/frontend
+      - /var/www/frontend/node_modules
+    ports:
+      - "8081:80"
+
+  backend:
+    build: docker/backend
+    volumes:
+      - ./backend:/var/www/backend
+      - /var/www/backend/vendor
+      - /var/www/backend/var
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+
+  database:
+    image: mysql:latest
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: secret
+      TZ: Europe/Warsaw
+
+volumes:
+  mysql_data:
