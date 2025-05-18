@@ -1,13 +1,13 @@
 services:
-  frontend:
-    build:
-      context: .
-      dockerfile: docker/frontend/Dockerfile
-    volumes:
-      - ./frontend:/var/www/frontend
-      - /var/www/frontend/node_modules
-    ports:
-      - "8081:80"
+#  frontend:
+#    build:
+#      context: .
+#      dockerfile: docker/frontend/Dockerfile
+#    volumes:
+#      - ./frontend:/var/www/frontend
+#      - /var/www/frontend/node_modules
+#    ports:
+#      - "8081:80"
 
   backend:
     build: docker/backend
@@ -26,6 +26,8 @@ services:
     container_name: app_database
     volumes:
       - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: app

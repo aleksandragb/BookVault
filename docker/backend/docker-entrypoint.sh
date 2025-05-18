@@ -27,6 +27,8 @@ if grep -q ^DATABASE_URL= .env; then
    if [ "$(find ./migrations -iname '*.php' -print -quit)" ]; then
        php bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
    fi
+
+   php bin/console lexik:jwt:generate-keypair --skip-if-exists
 fi
 
 exec docker-php-entrypoint "$@"
