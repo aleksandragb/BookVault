@@ -1,6 +1,6 @@
 <?php
 
-namespace App\State;
+namespace App\State\Processor;
 
 use ApiPlatform\Doctrine\Common\State\PersistProcessor;
 use ApiPlatform\Metadata\Operation;
