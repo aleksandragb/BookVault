@@ -3,12 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
-use App\State\UserPasswordHasher;
+use App\State\Processor\UserPasswordHasher;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,11 +21,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             validationContext: ['groups' => ['user:create']],
             processor: UserPasswordHasher::class),
-        new Get(),
+        new Get(
+            security: 'object === user'
+        ),
         new Patch(
             denormalizationContext: ['groups' => ['user:update']],
-            processor: UserPasswordHasher::class),
-        new Delete(),
+            security: 'object === user',
+            processor: UserPasswordHasher::class
+        )
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:create', 'user:update']],
