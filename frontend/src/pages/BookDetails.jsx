@@ -21,6 +21,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Header from "../pages/Header";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -214,6 +215,7 @@ const BookDetails = () => {
 
 return (
   <Box sx={{ p: 4 }}>
+    <Header />
     <Box display="flex" gap={4} alignItems="flex-start">
       {/* LEWA KOLUMNA: Książka */}
       <Card sx={{ width: 400 }}>

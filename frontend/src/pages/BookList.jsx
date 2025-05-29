@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Header from "../pages/Header";
 
 const BookList = () => {
   const [open, setOpen] = useState(false);
@@ -104,6 +105,7 @@ const BookList = () => {
 
   return (
     <Box sx={{ p: 4, width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+    <Header />
     <Box display="flex" justifyContent="center" mb={4}>
       <Button variant="contained" size="large" onClick={() => setOpen(true)}>
         Dodaj książkę
