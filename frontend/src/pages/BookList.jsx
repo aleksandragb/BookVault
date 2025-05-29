@@ -30,6 +30,7 @@ const BookList = () => {
   const [books, setBooks] = useState([]);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("default");
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -104,10 +105,20 @@ const BookList = () => {
 
   };
 
-  const filteredBooks = books.filter((b) =>
-    b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.author.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredBooks = books
+    .filter((b) =>
+      b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      b.author.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortOption === "title") {
+        return a.title.localeCompare(b.title);
+      }
+      if (sortOption === "date") {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      return 0;
+  });
 
 
   return (
@@ -122,6 +133,20 @@ const BookList = () => {
           size="small"
           sx={{ minWidth: 300, height: "40px" }}
         />
+        <TextField
+          select
+          label="Sortuj według"
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+          size="small"
+          sx={{ minWidth: 200 }}
+          SelectProps={{ native: true }}
+        >
+          <option value="default">Domyślnie</option>
+          <option value="title">Tytuł (A-Z)</option>
+          <option value="date">Data dodania (najnowsze)</option>
+        </TextField>
+
         <Button variant="contained" size="large" onClick={() => setOpen(true)}>
           Dodaj książkę
         </Button>
