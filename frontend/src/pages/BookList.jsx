@@ -29,6 +29,7 @@ const BookList = () => {
   });
   const [books, setBooks] = useState([]);
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -103,17 +104,33 @@ const BookList = () => {
 
   };
 
+  const filteredBooks = books.filter((b) =>
+    b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    b.author.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+
   return (
     <Box sx={{ p: 4, width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
-    <Header />
-    <Box display="flex" justifyContent="center" mb={4}>
-      <Button variant="contained" size="large" onClick={() => setOpen(true)}>
-        Dodaj książkę
-      </Button>
-    </Box>
+      <Header />
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4} flexWrap="wrap" gap={2}>
+        <TextField
+          label="Szukaj"
+          variant="outlined"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          size="small"
+          sx={{ minWidth: 300, height: "40px" }}
+        />
+        <Button variant="contained" size="large" onClick={() => setOpen(true)}>
+          Dodaj książkę
+        </Button>
+      </Box>
+
 
       <Grid container spacing={3}>
-        {Array.isArray(books) && books.map((b) => (
+        {Array.isArray(filteredBooks) && filteredBooks.map((b) => (
+
           <Grid item key={b.id} xs={12} sm={6} md={4} lg={3}>
             <Card onClick={() => navigate(`/book/${b.id}`)} sx={{ cursor: "pointer" }}>
               <CardActionArea>
