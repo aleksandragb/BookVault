@@ -8,6 +8,7 @@ import { CssBaseline } from '@mui/material';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import BookList from './pages/BookList';
+import BookDetails from "./pages/BookDetails";
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/library" element={<BookList />} />
+          <Route path="/book/:id" element={<BookDetails />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
