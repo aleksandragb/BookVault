@@ -22,6 +22,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Header from "../pages/Header";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -213,181 +214,191 @@ const BookDetails = () => {
 
 
 
-return (
-  <Box sx={{ p: 4 }}>
-    <Header />
-    <Box display="flex" gap={4} alignItems="flex-start">
-      {/* LEWA KOLUMNA: Książka */}
-      <Card sx={{ width: 400 }}>
-        {book.filePath && (
-          <CardMedia
-            component="img"
-            height="300"
-            image={`http://localhost:8080${book.filePath}`}
-            alt={book.title}
-          />
-        )}
-        <CardContent>
-          <Typography variant="h4">{book.title}</Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Autor: {book.author}
-          </Typography>
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            Opis: {book.description || "Brak opisu"}
-          </Typography>
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            Ocena: {book.rating}/10
-          </Typography>
-          <Box sx={{ mt: 3, textAlign: "center" }}>
-            <Button variant="outlined" sx={{ mr: 2 }} onClick={() => setEditBookOpen(true)}>
-              Edytuj
-            </Button>
-            <Button variant="contained" color="error" onClick={handleDelete}>
-              Usuń
+  return (
+    <Box sx={{ p: 4 }}>
+      <Header />
+      <Box sx={{ mb: 2 }}>
+        <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate("/library")}
+            sx={{ textTransform: "none" }}
+        >
+        Powrót do Biblioteki
+        </Button>
+        </Box>
+      <Box display="flex" gap={4} alignItems="flex-start">
+        {/* LEWA KOLUMNA: Książka */}
+        <Card sx={{ width: 400 }}>
+          {book.filePath && (
+            <CardMedia
+              component="img"
+              height="300"
+              image={`http://localhost:8080${book.filePath}`}
+              alt={book.title}
+            />
+          )}
+          <CardContent>
+            <Typography variant="h4">{book.title}</Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Autor: {book.author}
+            </Typography>
+            <Typography variant="body1" sx={{ mt: 2 }}>
+              Opis: {book.description || "Brak opisu"}
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Ocena: {book.rating}/10
+            </Typography>
+            <Box sx={{ mt: 3, textAlign: "center" }}>
+              <Button variant="outlined" sx={{ mr: 2 }} onClick={() => setEditBookOpen(true)}>
+                Edytuj
+              </Button>
+              <Button variant="contained" color="error" onClick={handleDelete}>
+                Usuń
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* PRAWA KOLUMNA: Notatki */}
+        <Box sx={{ flex: 1, maxWidth: 600 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, flexWrap: "wrap", gap: 1 }}>
+          <Typography variant="h5" sx={{ flexGrow: 1 }}>Notatki</Typography>
+          <Box>
+            <Button variant="contained" onClick={() => setAddOpen(true)}>
+              Dodaj notatkę
             </Button>
           </Box>
-        </CardContent>
-      </Card>
+        </Box>
 
-      {/* PRAWA KOLUMNA: Notatki */}
-      <Box sx={{ flex: 1, maxWidth: 600 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, flexWrap: "wrap", gap: 1 }}>
-        <Typography variant="h5" sx={{ flexGrow: 1 }}>Notatki</Typography>
-        <Box>
-          <Button variant="contained" onClick={() => setAddOpen(true)}>
-            Dodaj notatkę
-          </Button>
+
+          {notes.length === 0 ? (
+            <Typography variant="body2">Brak notatek do tej książki.</Typography>
+          ) : (
+            notes.map((note) => (
+              <Accordion key={note.id} sx={{ mb: 2 }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  sx={{
+                    minHeight: 48,
+                    maxHeight: 48,
+                    '& .MuiAccordionSummary-content': {
+                      overflow: 'hidden',
+                    },
+                  }}
+                >
+                  <Typography
+                    noWrap
+                    sx={{
+                      width: "100%",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {note.content.split("\n")[0]}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography whiteSpace="pre-wrap">{note.content}</Typography>
+                  <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
+                    <IconButton size="small" onClick={() => handleEditClick(note)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton size="small" onClick={() => handleDeleteNote(note.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+            ))
+          )}
         </Box>
       </Box>
 
-
-        {notes.length === 0 ? (
-          <Typography variant="body2">Brak notatek do tej książki.</Typography>
-        ) : (
-          notes.map((note) => (
-            <Accordion key={note.id} sx={{ mb: 2 }}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                sx={{
-                  minHeight: 48,
-                  maxHeight: 48,
-                  '& .MuiAccordionSummary-content': {
-                    overflow: 'hidden',
-                  },
-                }}
-              >
-                <Typography
-                  noWrap
-                  sx={{
-                    width: "100%",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {note.content.split("\n")[0]}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography whiteSpace="pre-wrap">{note.content}</Typography>
-                <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
-                  <IconButton size="small" onClick={() => handleEditClick(note)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton size="small" onClick={() => handleDeleteNote(note.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-          ))
-        )}
-      </Box>
-    </Box>
-
-      {/* Dialog edycji */}
-      <Dialog open={editBookOpen} onClose={() => setEditBookOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Edytuj książkę</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Tytuł"
-            name="title"
-            fullWidth
-            margin="normal"
-            value={formData.title}
-            onChange={handleEditChange}
-          />
-          <TextField
-            label="Autor"
-            name="author"
-            fullWidth
-            margin="normal"
-            value={formData.author}
-            onChange={handleEditChange}
-          />
-          <TextField
-            label="Opis"
-            name="description"
-            fullWidth
-            margin="normal"
-            multiline
-            rows={3}
-            value={formData.description}
-            onChange={handleEditChange}
-          />
-          <TextField
-            label="Ocena"
-            name="rating"
-            type="number"
-            inputProps={{ min: 1, max: 10 }}
-            fullWidth
-            margin="normal"
-            value={formData.rating}
-            onChange={handleEditChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditBookOpen(false)}>Anuluj</Button>
-          <Button variant="contained" onClick={handleEditSubmit}>
-            Zapisz
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={addOpen} onClose={() => setAddOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Dodaj notatkę</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Treść notatki"
-            multiline
-            fullWidth
-            minRows={4}
-            value={newNoteContent}
-            onChange={(e) => setNewNoteContent(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setAddOpen(false)}>Anuluj</Button>
-          <Button variant="contained" onClick={handleAddNote}>Zapisz</Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={editNoteOpen} onClose={() => setEditNoteOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Edytuj notatkę</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Treść notatki"
-            multiline
-            fullWidth
-            minRows={4}
-            value={editContent}
-            onChange={(e) => setEditContent(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditNoteOpen(false)}>Anuluj</Button>
-          <Button variant="contained" onClick={handleEditSave}>Zapisz</Button>
-        </DialogActions>
-      </Dialog>
-
+        {/* Dialog edycji */}
+        <Dialog open={editBookOpen} onClose={() => setEditBookOpen(false)} maxWidth="sm" fullWidth>
+          <DialogTitle>Edytuj książkę</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Tytuł"
+              name="title"
+              fullWidth
+              margin="normal"
+              value={formData.title}
+              onChange={handleEditChange}
+            />
+            <TextField
+              label="Autor"
+              name="author"
+              fullWidth
+              margin="normal"
+              value={formData.author}
+              onChange={handleEditChange}
+            />
+            <TextField
+              label="Opis"
+              name="description"
+              fullWidth
+              margin="normal"
+              multiline
+              rows={3}
+              value={formData.description}
+              onChange={handleEditChange}
+            />
+            <TextField
+              label="Ocena"
+              name="rating"
+              type="number"
+              inputProps={{ min: 1, max: 10 }}
+              fullWidth
+              margin="normal"
+              value={formData.rating}
+              onChange={handleEditChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setEditBookOpen(false)}>Anuluj</Button>
+            <Button variant="contained" onClick={handleEditSubmit}>
+              Zapisz
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={addOpen} onClose={() => setAddOpen(false)} maxWidth="sm" fullWidth>
+          <DialogTitle>Dodaj notatkę</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Treść notatki"
+              multiline
+              fullWidth
+              minRows={4}
+              value={newNoteContent}
+              onChange={(e) => setNewNoteContent(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setAddOpen(false)}>Anuluj</Button>
+            <Button variant="contained" onClick={handleAddNote}>Zapisz</Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={editNoteOpen} onClose={() => setEditNoteOpen(false)} maxWidth="sm" fullWidth>
+          <DialogTitle>Edytuj notatkę</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Treść notatki"
+              multiline
+              fullWidth
+              minRows={4}
+              margin="normal"
+              variant="outlined"
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setEditNoteOpen(false)}>Anuluj</Button>
+            <Button variant="contained" onClick={handleEditSave}>Zapisz</Button>
+          </DialogActions>
+        </Dialog>
     </Box>
   );
 };
