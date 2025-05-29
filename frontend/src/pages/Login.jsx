@@ -26,10 +26,11 @@ const Login = () => {
         email,
         password,
       });
-
+      console.log("Login response:", res.data);
       const { token, user } = res.data;
 
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
       login(user);
 
